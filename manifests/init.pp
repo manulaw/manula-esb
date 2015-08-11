@@ -122,6 +122,14 @@ class esb (
       require   => Deploy[$deployment_code],
   }
 
+  cron { 'remove old files':
+    command => "/usr/bin/find ${carbon_home}/repository/logs/ -type f -mtime +10 -exec rm {} \;",
+    user    => 'root',
+    hour    => 23, 
+    minute  => 59,
+  }
+
+
   service { "wso2${service_code}":
       ensure     => running,
       hasstatus  => true,
